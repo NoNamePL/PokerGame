@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"html/template"
+	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"time"
 )
@@ -14,23 +14,30 @@ type Welcome struct {
 
 func main() {
 	welcome := Welcome{"Anonymous", time.Now().Format(time.Stamp)}
-	// HTML
-	templates := template.Must(template.ParseFiles("templates/awesomeProject.html"))
-	//CSS
-	http.Handle("/static/",
-		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("static"))))
-	// show main page
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if name := r.FormValue("name"); name != "" {
+	r := gin.Default()
+
+	r.LoadHTMLFiles("templates/awesomeProject.html")
+	r.Static("/static", "./static/")
+
+	r.GET("/ping", func(c *gin.Context) {
+		/* output JSON
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+		*/
+		if name := c.Request.FormValue("name"); name != "" {
 			welcome.Name = name
 		}
-		if err := templates.ExecuteTemplate(w, "awesomeProject.html", welcome); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
+		c.HTML(
+			http.StatusOK,
+			"awesomeProject.html",
+			gin.H{
+				"status": http.StatusOK,
+				"Name":   welcome.Name,
+				"Time":   welcome.Time,
+			},
+		)
 	})
 
-	fmt.Println("Listening")
-	fmt.Println(http.ListenAndServe(":8080", nil))
-
+	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
 }
