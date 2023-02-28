@@ -18,6 +18,7 @@ func main() {
 	r := gin.Default()
 
 	r.LoadHTMLFiles("templates/awesomeProject.html")
+	r.LoadHTMLFiles("templates/index.html")
 	r.Static("/static", "./static/")
 
 	r.GET("/ping", func(c *gin.Context) {
