@@ -38,6 +38,14 @@ func main() {
 			},
 		)
 	})
-
+	r.GET("/",func(ctx *gin.Context) {
+		c.HTML(
+			http.StatusOK,
+			"index.html",
+			gin.H{
+				"status":http.StatusOK,
+			},
+		)
+	})
 	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
 }
