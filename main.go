@@ -1,10 +1,11 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gin-gonic/gin"
 )
 
 type Welcome struct {
@@ -38,12 +39,12 @@ func main() {
 			},
 		)
 	})
-	r.GET("/",func(ctx *gin.Context) {
+	r.GET("/", func(c *gin.Context) {
 		c.HTML(
 			http.StatusOK,
 			"index.html",
 			gin.H{
-				"status":http.StatusOK,
+				"status": http.StatusOK,
 			},
 		)
 	})
