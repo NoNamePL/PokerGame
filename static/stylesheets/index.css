@@ -61,6 +61,7 @@ h1 {
 }
 
 .buttons {
+    height: 100%;
     width: 100%;
     display: flex;
     justify-content: space-around;
@@ -70,35 +71,15 @@ h1 {
     display: inline-block;
     background-color: blue;
     color: #FFFFFF;
-    padding: 14px 25px;
+    padding: 1px 25px;
     text-align: center;
     text-decoration: none;
     font-size: 16px;
     margin-left: 20px;
-    opacity: 0.9;
+    border: 2px solid darkblue ;
 }
 
-.buttons a:visited{
-    display: inline-block;
-    background-color: #f44336;
-    color: #FFFFFF;
-    padding: 14px 25px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px;
-    margin-left: 20px;
-    opacity: 0.9;
-}
 
-.reg {
-    background-color: red;
-
-}
-
-.log{
-    background-color: blue;
-    
-}
 
 .mainText {
     display: flex;
@@ -106,4 +87,19 @@ h1 {
     margin-bottom: 300px;
     font-size: 20px;
     line-height: 75px;
+}
+
+#log_button {
+    background-color: #be3329;
+    border: 2px solid #8d221b ;
+}
+
+.login .mainText {
+    margin:40px auto 0px auto;
+    width:100px;
+    height: 40px;
+    padding:10px;
+    background-color: #c5c5c5;
+    border-radius:5px;
+    box-shadow: 0px 0px 10px #000;
 }
