@@ -17,16 +17,12 @@ func main() {
 	welcome := Welcome{"Anonymous", time.Now().Format(time.Stamp)}
 	r := gin.Default()
 
-	r.LoadHTMLFiles("templates/awesomeProject.html")
-	r.LoadHTMLFiles("templates/index.html")
+	r.LoadHTMLFiles("templates/awesomeProject.html", "templates/index.html")
+
 	r.Static("/static", "./static/")
 
 	r.GET("/ping", func(c *gin.Context) {
-		/* output JSON
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-		*/
+
 		if name := c.Request.FormValue("name"); name != "" {
 			welcome.Name = name
 		}
