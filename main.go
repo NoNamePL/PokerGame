@@ -1,6 +1,7 @@
 package main
 
 import (
+	"database/sql"
 	"log"
 	"net/http"
 	"time"
@@ -13,27 +14,18 @@ type Welcome struct {
 	Time string
 }
 
-func main() {
-
-	r := gin.Default()
-	//r.LoadHTMLFiles("templates/awesomeProject.html", "templates/index.html")
-	r.LoadHTMLGlob("templates/*.html")
-
-	r.Static("/static", "./static/")
-
-	r.GET("/ping", handlerPing)
-	r.GET("/", handlerMain)
-	r.GET("/login", handlerLogin)
-	r.GET("/register", handlerRegister)
-	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
-}
-
 func handlerLogin(c *gin.Context) {
 
 }
 
 func handlerRegister(c *gin.Context) {
-
+	c.HTML(
+		http.StatusOK,
+		"register.html",
+		gin.H{
+			"status": http.StatusOK,
+		},
+	)
 }
 
 func handlerPing(c *gin.Context) {
@@ -52,7 +44,7 @@ func handlerPing(c *gin.Context) {
 	)
 }
 
-func handlerMain(c *gin.Context) {
+func handlerMain(c *gin.Context, db *sql.DB) {
 	c.HTML(
 		http.StatusOK,
 		"index.html",
@@ -60,4 +52,30 @@ func handlerMain(c *gin.Context) {
 			"status": http.StatusOK,
 		},
 	)
+}
+
+func main() {
+
+	//connecting := "postgres://postgres:postgrespw@localhost:32768/university?sslmode=disable"
+	// connecting to DB
+	//db, err := sql.Open("postgres", connecting)
+	//if err != nil {
+	//	log.Fatal(err)
+	//}
+
+	db := sql.DB{}
+
+	r := gin.Default()
+	//r.LoadHTMLFiles("templates/awesomeProject.html", "templates/index.html")
+	r.LoadHTMLGlob("templates/*.html")
+
+	r.Static("/static", "./static/")
+
+	r.GET("/login", handlerLogin)
+	r.GET("/register", handlerRegister)
+	r.GET("/ping", handlerPing)
+	r.GET("/", func(ctx *gin.Context) {
+		handlerMain(ctx, &db)
+	})
+	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
 }
