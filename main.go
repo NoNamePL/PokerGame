@@ -14,8 +14,16 @@ type Welcome struct {
 	Time string
 }
 
-func handlerLogin(c *gin.Context) {
+//GET
 
+func handlerLogin(c *gin.Context) {
+	c.HTML(
+		http.StatusOK,
+		"login.html",
+		gin.H{
+			"status": http.StatusOK,
+		},
+	)
 }
 
 func handlerRegister(c *gin.Context) {
@@ -54,6 +62,12 @@ func handlerMain(c *gin.Context, db *sql.DB) {
 	)
 }
 
+// POST
+
+func postLogin(c *gin.Context) {
+
+}
+
 func main() {
 
 	//connecting := "postgres://postgres:postgrespw@localhost:32768/university?sslmode=disable"
@@ -74,6 +88,7 @@ func main() {
 	r.GET("/login", handlerLogin)
 	r.GET("/register", handlerRegister)
 	r.GET("/ping", handlerPing)
+	r.POST("/login", postLogin)
 	r.GET("/", func(ctx *gin.Context) {
 		handlerMain(ctx, &db)
 	})
