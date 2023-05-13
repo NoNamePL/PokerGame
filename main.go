@@ -9,6 +9,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+type Users struct {
+	ID int ``
+}
+
 type Welcome struct {
 	Name string
 	Time string
