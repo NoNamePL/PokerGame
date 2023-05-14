@@ -21,7 +21,7 @@ type Welcome struct {
 
 //GET
 
-func handlerLogin(c *gin.Context) {
+func handlerLogin(c *gin.Context, db *sql.DB) {
 	c.HTML(
 		http.StatusOK,
 		"login.html",
@@ -31,7 +31,7 @@ func handlerLogin(c *gin.Context) {
 	)
 }
 
-func handlerRegister(c *gin.Context) {
+func handlerRegister(c *gin.Context, db *sql.DB) {
 	c.HTML(
 		http.StatusOK,
 		"register.html",
@@ -41,7 +41,7 @@ func handlerRegister(c *gin.Context) {
 	)
 }
 
-func handlerPing(c *gin.Context) {
+func handlerPing(c *gin.Context, db *sql.DB) {
 	welcome := Welcome{"Anonymous", time.Now().Format(time.Stamp)}
 	if name := c.Request.FormValue("name"); name != "" {
 		welcome.Name = name
@@ -69,7 +69,11 @@ func handlerMain(c *gin.Context, db *sql.DB) {
 
 // POST
 
-func postLogin(c *gin.Context) {
+func postLogin(c *gin.Context, db *sql.DB) {
+
+}
+
+func postRegister(c *gin.Context, db *sql.DB) {
 
 }
 
@@ -107,12 +111,24 @@ func main() {
 
 	r.Static("/static", "./static/")
 
-	r.GET("/login", handlerLogin)
-	r.GET("/register", handlerRegister)
-	r.GET("/ping", handlerPing)
-	r.POST("/login", postLogin)
+	r.GET("/login", func(ctx *gin.Context) {
+		handlerLogin(ctx, db)
+	})
+	r.GET("/register", func(ctx *gin.Context) {
+		handlerRegister(ctx, db)
+	})
+	r.GET("/ping", func(ctx *gin.Context) {
+		handlerPing(ctx, db)
+	})
+	r.POST("/login", func(ctx *gin.Context) {
+		postLogin(ctx, db)
+	})
+	r.POST("/register", func(ctx *gin.Context) {
+		postRegister(ctx, db)
+	})
 	r.GET("/", func(ctx *gin.Context) {
 		handlerMain(ctx, db)
 	})
+
 	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
 }
