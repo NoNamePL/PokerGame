@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	_ "github.com/lib/pq"
 )
 
 type Users struct {
@@ -72,16 +73,33 @@ func postLogin(c *gin.Context) {
 
 }
 
+/*
+const (
+
+	host     = "localhost"
+	port     = 32768
+	user     = "postgres"
+	password = "postgrespw"
+	dbname   = "PokerGame"
+
+)
+*/
 func main() {
 
-	//connecting := "postgres://postgres:postgrespw@localhost:32768/university?sslmode=disable"
+	connecting := "postgres://postgres:postgrespw@localhost:32768/PokerGame?sslmode=disable"
 	// connecting to DB
-	//db, err := sql.Open("postgres", connecting)
-	//if err != nil {
-	//	log.Fatal(err)
-	//}
+	/*
+		psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+			"password=%s dbname=%s sslmode=disable",
+			host, port, user, password, dbname)
+	*/
+	db, err := sql.Open("postgres", connecting)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer db.Close()
 
-	db := sql.DB{}
+	//	db := sql.DB{}
 
 	r := gin.Default()
 	//r.LoadHTMLFiles("templates/awesomeProject.html", "templates/index.html")
@@ -94,7 +112,7 @@ func main() {
 	r.GET("/ping", handlerPing)
 	r.POST("/login", postLogin)
 	r.GET("/", func(ctx *gin.Context) {
-		handlerMain(ctx, &db)
+		handlerMain(ctx, db)
 	})
 	log.Fatal(r.Run()) // listen and server on 0.0.0.0:8080
 }
